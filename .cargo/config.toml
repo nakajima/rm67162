@@ -1,0 +1,21 @@
+[target.xtensa-esp32s3-none-elf]
+runner = "espflash flash --monitor"
+
+[build]
+rustflags = [
+  "-C",
+  "link-arg=-Tlinkall.x",
+  "-C",
+  "link-arg=-nostartfiles",
+  "-C",
+  "force-frame-pointers",
+]
+
+target = "xtensa-esp32s3-none-elf"
+
+[unstable]
+build-std = ["alloc", "core"]
+
+[env]
+ESP_LOG = "DEBUG"
+ESP_HAL_PLACE_SPI_DRIVER_IN_RAM = "true"
