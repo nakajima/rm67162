@@ -72,7 +72,7 @@ impl<'d> RM67162<'d> {
         self.command(0x36, &[self.orientation.to_madctr()])
     }
 
-    fn set_address(
+    pub(crate) fn set_address(
         &mut self,
         x1: u16,
         y1: u16,

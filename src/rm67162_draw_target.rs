@@ -1,10 +1,14 @@
+use embedded_graphics::pixelcolor::raw::ToBytes;
 use embedded_graphics::{
     pixelcolor::Rgb565,
     prelude::{DrawTarget, OriginDimensions, Size},
     Pixel,
 };
 
-use crate::{orientation::Orientation, rm67162::RM67162};
+use crate::{
+    orientation::Orientation,
+    rm67162::{BUFFER_PIXELS, RM67162},
+};
 
 impl<'d> OriginDimensions for RM67162<'d> {
     /// Returns the bounding box.
@@ -36,6 +40,38 @@ impl<'d> DrawTarget for RM67162<'d> {
 
             self.draw_point(pt.x as u16, pt.y as u16, color).unwrap();
         }
+
+        Ok(())
+    }
+
+    fn fill_contiguous<I>(
+        &mut self,
+        area: &embedded_graphics::primitives::Rectangle,
+        colors: I,
+    ) -> Result<(), Self::Error>
+    where
+        I: IntoIterator<Item = Self::Color>,
+    {
+        self.set_address(
+            area.top_left.x as u16,
+            area.top_left.y as u16,
+            area.size.width as u16,
+            area.size.height as u16,
+        )?;
+
+        let mut first_send = true;
+        self.chip_select.set_low();
+
+        for color in colors
+            .into_iter()
+            .take(area.size.width as usize * area.size.height as usize)
+        {
+            let bytes = color.to_be_bytes();
+            self.send_chunk(bytes.as_ptr(), bytes.len(), first_send);
+            first_send = false;
+        }
+
+        self.chip_select.set_high();
 
         Ok(())
     }
