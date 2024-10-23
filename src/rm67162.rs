@@ -131,14 +131,14 @@ impl<'d> RM67162<'d> {
         }
     }
 
-    pub fn fill_with(
+    pub fn fill_with<const W: usize, const H: usize>(
         &mut self,
         frame_buffer: &Framebuffer<
             Rgb565,
             RawU16,
             BigEndian,
-            536,
-            240,
+            W,
+            H,
             { embedded_graphics::framebuffer::buffer_size::<Rgb565>(536, 240) },
         >,
     ) -> Result<(), esp_hal::spi::Error> {

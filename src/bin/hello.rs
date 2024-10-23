@@ -81,19 +81,18 @@ fn main() -> ! {
         .with_dma(dma_channel.configure_for_async(false, DmaPriority::Priority0))
         .with_buffers(rx_buf, tx_buf);
 
-    let mut display = RM67162::new(spi, chip_select, delay, Orientation::Portrait);
+    let mut display = RM67162::new(spi, chip_select, delay, Orientation::PortraitFlipped);
     display.reset(&mut reset);
     display.initialize();
-    display.set_orientation(Orientation::Landscape).unwrap();
     println!("screen init ok");
 
     let mut frame_buffer = Framebuffer::<
         Rgb565,
         _,
         BigEndian,
-        536,
         240,
-        { embedded_graphics::framebuffer::buffer_size::<Rgb565>(536, 240) },
+        536,
+        { embedded_graphics::framebuffer::buffer_size::<Rgb565>(240, 536) },
     >::new();
 
     frame_buffer.clear(Rgb565::BLUE).unwrap();
@@ -102,8 +101,8 @@ fn main() -> ! {
     loop {
         let character_style = MonoTextStyle::new(&FONT_24X32, Rgb565::CSS_AQUA);
         Text::with_alignment(
-            "hello world",
-            Point::new(260, 100),
+            "hello\nworld",
+            Point::new(80, 40),
             character_style,
             Alignment::Center,
         )

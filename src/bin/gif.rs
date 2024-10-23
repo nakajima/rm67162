@@ -81,7 +81,6 @@ fn main() -> ! {
     let mut display = RM67162::new(spi, chip_select, delay, Orientation::Portrait);
     display.reset(&mut reset);
     display.initialize();
-    display.set_orientation(Orientation::Landscape).unwrap();
     println!("screen init ok");
 
     let mut frame_buffer = Framebuffer::<
