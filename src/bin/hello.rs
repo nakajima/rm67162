@@ -12,6 +12,7 @@ use embedded_graphics::pixelcolor::Rgb565;
 use embedded_graphics::prelude::{Point, RgbColor, WebColors};
 use embedded_graphics::text::{Alignment, Text};
 use embedded_graphics::Drawable;
+use embedded_vintage_fonts::FONT_24X32;
 use esp_backtrace as _;
 use esp_hal::delay::Delay;
 use esp_hal::gpio::{Level, NoPin, Output};
@@ -75,9 +76,9 @@ fn main() -> ! {
     let rx_buf = DmaRxBuf::new(rx_descriptors, rx_buffer).unwrap();
     let tx_buf = DmaTxBuf::new(tx_descriptors, tx_buffer).unwrap();
 
-    let spi = Spi::new_half_duplex(peripherals.SPI3, 75_u32.MHz(), SpiMode::Mode0)
+    let spi = Spi::new_half_duplex(peripherals.SPI2, 75_u32.MHz(), SpiMode::Mode0)
         .with_pins(sclk, d0, d1, d2, d3, NoPin)
-        .with_dma(dma_channel.configure_for_async(false, DmaPriority::Priority0))
+        .with_dma(dma_channel.configure(false, DmaPriority::Priority0))
         .with_buffers(rx_buf, tx_buf);
 
     let mut display = RM67162::new(spi, chip_select, delay, Orientation::Portrait);
@@ -99,10 +100,10 @@ fn main() -> ! {
     display.fill_with(&frame_buffer).unwrap();
 
     loop {
-        let character_style = MonoTextStyle::new(&FONT_10X20, Rgb565::CSS_AQUA);
+        let character_style = MonoTextStyle::new(&FONT_24X32, Rgb565::CSS_AQUA);
         Text::with_alignment(
             "hello world",
-            Point::new(300, 100),
+            Point::new(260, 100),
             character_style,
             Alignment::Center,
         )
