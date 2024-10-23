@@ -75,7 +75,7 @@ fn main() -> ! {
 
     let spi = Spi::new_half_duplex(peripherals.SPI3, 75_u32.MHz(), SpiMode::Mode0)
         .with_pins(sclk, d0, d1, d2, d3, NoPin)
-        .with_dma(dma_channel.configure(false, DmaPriority::Priority0))
+        .with_dma(dma_channel.configure_for_async(false, DmaPriority::Priority0))
         .with_buffers(rx_buf, tx_buf);
 
     let mut display = RM67162::new(spi, chip_select, delay, Orientation::Portrait);

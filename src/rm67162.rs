@@ -14,7 +14,6 @@ use esp_hal::gpio::Output;
 use esp_hal::spi::master::{Address, Command, HalfDuplexReadWrite, SpiDmaBus};
 use esp_hal::spi::{HalfDuplexMode, SpiDataMode};
 use esp_hal::Async;
-use esp_hal::Blocking;
 use esp_println::println;
 
 pub const BUFFER_PIXELS: usize = 16368 / 2;
@@ -22,14 +21,14 @@ pub const BUFFER_SIZE: usize = BUFFER_PIXELS * 2;
 
 pub struct RM67162<'d> {
     pub orientation: Orientation,
-    pub(crate) spi: SpiDmaBus<'d, HalfDuplexMode, Blocking>,
+    pub(crate) spi: SpiDmaBus<'d, HalfDuplexMode, Async>,
     pub(crate) chip_select: Output<'d>,
     delay: Delay,
 }
 
 impl<'d> RM67162<'d> {
     pub fn new(
-        spi: SpiDmaBus<'d, HalfDuplexMode, Blocking>,
+        spi: SpiDmaBus<'d, HalfDuplexMode, Async>,
         chip_select: Output<'d, AnyPin>,
         delay: Delay,
         orientation: Orientation,
