@@ -5,24 +5,16 @@ edition = "2021"
 
 [dependencies]
 embedded-graphics = "0.8.1"
-esp-hal = { git = "https://github.com/esp-rs/esp-hal.git", features = [
-  "esp32s3",
-] }
-esp-alloc = { git = "https://github.com/esp-rs/esp-hal.git" }
-esp-hal-embassy = { git = "https://github.com/esp-rs/esp-hal.git", features = [
-  "esp32s3",
-  "integrated-timers",
-] }
-esp-backtrace = { git = "https://github.com/esp-rs/esp-hal.git", features = [
+esp-hal = { features = ["esp32s3"] }
+esp-alloc = {}
+esp-hal-embassy = { features = ["esp32s3", "integrated-timers"] }
+esp-backtrace = { features = [
   "esp32s3",
   "exception-handler",
   "panic-handler",
   "println",
 ] }
-esp-println = { git = "https://github.com/esp-rs/esp-hal.git", features = [
-  "esp32s3",
-  "log",
-] }
+esp-println = { features = ["esp32s3", "log"] }
 embassy-executor = { version = "0.6.1" }
 embassy-futures = "0.1.1"
 embedded-hal = "1.0.0"
