@@ -76,8 +76,12 @@ fn main() -> ! {
     let rx_buf = DmaRxBuf::new(rx_descriptors, rx_buffer).unwrap();
     let tx_buf = DmaTxBuf::new(tx_descriptors, tx_buffer).unwrap();
 
-    let spi = Spi::new_half_duplex(peripherals.SPI2, 75_u32.MHz(), SpiMode::Mode0)
-        .with_pins(sclk, d0, d1, d2, d3, NoPin)
+    let spi = Spi::new(peripherals.SPI2, 75_u32.MHz(), SpiMode::Mode0)
+        .with_sck(sclk)
+        .with_mosi(d0)
+        .with_miso(d1)
+        .with_sio2(d2)
+        .with_sio3(d3)
         .with_dma(dma_channel.configure_for_async(false, DmaPriority::Priority0))
         .with_buffers(rx_buf, tx_buf);
 
