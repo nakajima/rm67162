@@ -11,8 +11,8 @@ use esp_backtrace as _;
 use esp_hal::delay::Delay;
 use esp_hal::gpio::AnyPin;
 use esp_hal::gpio::Output;
-use esp_hal::spi::master::{Address, Command, HalfDuplexReadWrite, SpiDmaBus};
-use esp_hal::spi::{HalfDuplexMode, SpiDataMode};
+use esp_hal::spi::master::{Address, Command, SpiDmaBus};
+use esp_hal::spi::SpiDataMode;
 use esp_hal::Async;
 use esp_println::println;
 
@@ -21,14 +21,14 @@ pub const BUFFER_SIZE: usize = BUFFER_PIXELS * 2;
 
 pub struct RM67162<'d> {
     pub orientation: Orientation,
-    pub(crate) spi: SpiDmaBus<'d, HalfDuplexMode, Async>,
+    pub(crate) spi: SpiDmaBus<'d, Async>,
     pub(crate) chip_select: Output<'d>,
     delay: Delay,
 }
 
 impl<'d> RM67162<'d> {
     pub fn new(
-        spi: SpiDmaBus<'d, HalfDuplexMode, Async>,
+        spi: SpiDmaBus<'d, Async>,
         chip_select: Output<'d, AnyPin>,
         delay: Delay,
         orientation: Orientation,
@@ -114,7 +114,7 @@ impl<'d> RM67162<'d> {
 
         if is_first {
             self.spi
-                .write(
+                .half_duplex_write(
                     SpiDataMode::Quad,
                     Command::Command8(0x32, SpiDataMode::Single),
                     Address::Address24(0x2C << 8, SpiDataMode::Single),
@@ -124,7 +124,7 @@ impl<'d> RM67162<'d> {
                 .unwrap();
         } else {
             self.spi
-                .write(SpiDataMode::Quad, Command::None, Address::None, 0, unsafe {
+                .half_duplex_write(SpiDataMode::Quad, Command::None, Address::None, 0, unsafe {
                     &*data
                 })
                 .unwrap();
@@ -171,7 +171,7 @@ impl<'d> RM67162<'d> {
 
         self.chip_select.set_low();
         self.spi
-            .write(
+            .half_duplex_write(
                 SpiDataMode::Quad,
                 Command::Command8(0x32, SpiDataMode::Single),
                 Address::Address24(0x2C << 8, SpiDataMode::Single),
@@ -187,7 +187,7 @@ impl<'d> RM67162<'d> {
     fn command(&mut self, cmd: u32, parameters: &[u8]) -> Result<(), esp_hal::spi::Error> {
         self.chip_select.set_low();
         self.spi
-            .write(
+            .half_duplex_write(
                 SpiDataMode::Single,
                 Command::Command8(0x02, SpiDataMode::Single),
                 Address::Address24(cmd << 8, SpiDataMode::Single),
@@ -204,7 +204,7 @@ impl<'d> RM67162<'d> {
 
         let mut buf: [u8; 3] = [0xFF, 0xFF, 0xFF];
         self.spi
-            .read(
+            .half_duplex_read(
                 SpiDataMode::Quad,
                 Command::None,
                 Address::Address24(0xDA, SpiDataMode::Quad),
