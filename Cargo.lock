@@ -190,9 +190,19 @@ checksum = "0fd0a2386252214d31d22400730e28e9c6bc62b346df62802e30a0bb3677e43b"
 dependencies = [
  "critical-section",
  "document-features",
- "embassy-executor-macros",
+ "embassy-executor-macros 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "embassy-time-driver",
  "embassy-time-queue-driver",
+]
+
+[[package]]
+name = "embassy-executor"
+version = "0.6.1"
+source = "git+https://github.com/embassy-rs/embassy.git#80cb2bc4a5b8bfa424126dc7cf7c957c6894628b"
+dependencies = [
+ "critical-section",
+ "document-features",
+ "embassy-executor-macros 0.6.1 (git+https://github.com/embassy-rs/embassy.git)",
 ]
 
 [[package]]
@@ -200,6 +210,17 @@ name = "embassy-executor-macros"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c853e6bcad2d1c0811f4de404cef87363a1fa2535430cf76824c163cf75689ba"
+dependencies = [
+ "darling",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.85",
+]
+
+[[package]]
+name = "embassy-executor-macros"
+version = "0.6.1"
+source = "git+https://github.com/embassy-rs/embassy.git#80cb2bc4a5b8bfa424126dc7cf7c957c6894628b"
 dependencies = [
  "darling",
  "proc-macro2",
@@ -530,7 +551,7 @@ source = "git+https://github.com/esp-rs/esp-hal.git#19b08efc1d21a7b92a796d6800c4
 dependencies = [
  "critical-section",
  "document-features",
- "embassy-executor",
+ "embassy-executor 0.6.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "embassy-time-driver",
  "esp-build",
  "esp-hal",
@@ -1031,7 +1052,7 @@ name = "rm67162"
 version = "0.1.0"
 dependencies = [
  "defmt",
- "embassy-executor",
+ "embassy-executor 0.6.1 (git+https://github.com/embassy-rs/embassy.git)",
  "embassy-futures",
  "embassy-sync 0.6.0",
  "embassy-time",
