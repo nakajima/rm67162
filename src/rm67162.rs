@@ -46,7 +46,6 @@ impl<'d> RM67162<'d> {
         self.delay.delay_millis(300);
         reset.set_high();
         self.delay.delay_millis(200);
-        println!("display reset!")
     }
 
     pub fn initialize(&mut self) {

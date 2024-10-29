@@ -5,9 +5,10 @@ edition = "2021"
 
 [dependencies]
 embedded-graphics = "0.8.1"
-esp-hal = { git = "https://github.com/esp-rs/esp-hal.git", features = [
+esp-hal = { git = "https://github.com/esp-rs/esp-hal.git", default-features = false, features = [
   "esp32s3",
   "defmt",
+  "octal-psram",
 ] }
 esp-alloc = { git = "https://github.com/esp-rs/esp-hal.git" }
 esp-hal-embassy = { git = "https://github.com/esp-rs/esp-hal.git", features = [
@@ -22,7 +23,6 @@ esp-backtrace = { git = "https://github.com/esp-rs/esp-hal.git", features = [
 ] }
 esp-println = { git = "https://github.com/esp-rs/esp-hal.git", features = [
   "esp32s3",
-  "log",
   "defmt-espflash",
 ] }
 embassy-executor = { version = "0.6.1" }
